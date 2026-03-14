@@ -48,7 +48,10 @@ EXPECTED_FUNCTIONS = {
     ],
     "metrics": [
         "purity",
+        "fidelity_pure",
         "fidelity",
+        "bell_state_fidelities",
+        "state_eigenvalues",
         "trace_distance",
         "concurrence",
         "linear_entropy",
