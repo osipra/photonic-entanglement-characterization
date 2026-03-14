@@ -67,3 +67,12 @@ def test_trace_distance_and_linear_entropy_cover_basic_state_mixedness() -> None
     assert np.isclose(metrics.trace_distance(rho_h, rho_v), 1.0)
     assert np.isclose(metrics.linear_entropy(rho_h), 0.0)
     assert np.isclose(metrics.linear_entropy(rho_mixed), 0.5)
+
+
+def test_concurrence_distinguishes_entangled_and_separable_two_qubit_states() -> None:
+    """Concurrence should be one for a Bell state and zero for a product state."""
+    rho_bell = states.density_matrix(states.bell_state("phi_plus"))
+    rho_hh = states.density_matrix(states.tensor_ket("HH"))
+
+    assert np.isclose(metrics.concurrence(rho_bell), 1.0)
+    assert np.isclose(metrics.concurrence(rho_hh), 0.0)

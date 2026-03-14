@@ -90,4 +90,14 @@ def linear_entropy(rho: ArrayLike) -> float:
 
 def concurrence(rho: ArrayLike) -> float:
     """Compute the concurrence of a two-qubit density matrix."""
-    raise NotImplementedError
+    rho_hermitian = states.make_hermitian(rho)
+    if rho_hermitian.shape != (4, 4):
+        raise ValueError("concurrence requires a 4x4 two-qubit density matrix.")
+
+    sigma_y = states.pauli("Y")
+    spin_flip = np.kron(sigma_y, sigma_y)
+    rho_tilde = spin_flip @ rho_hermitian.conj() @ spin_flip
+    eigenvalues = np.linalg.eigvals(rho_hermitian @ rho_tilde)
+    roots = np.sqrt(np.clip(np.real(np.real_if_close(eigenvalues)), 0.0, None))
+    ordered = np.sort(roots)[::-1]
+    return max(0.0, float(ordered[0] - ordered[1] - ordered[2] - ordered[3]))
