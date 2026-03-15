@@ -119,6 +119,7 @@ EXPECTED_FUNCTIONS = {
         "plot_density_matrix",
         "plot_coincidence_counts",
         "plot_bell_state_fidelities",
+        "plot_chsh_correlators",
     ],
 }
 
