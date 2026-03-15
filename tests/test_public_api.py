@@ -66,9 +66,15 @@ EXPECTED_FUNCTIONS = {
         "mle_diagnostics",
     ],
     "tomography": [
+        "bloch_vector_from_axis_probabilities",
+        "single_qubit_axis_probabilities_from_counts",
+        "single_qubit_density_matrix_from_probabilities",
+        "single_qubit_density_matrix_from_counts",
+        "project_to_physical_density_matrix",
         "measurement_projectors_from_labels",
         "linear_inversion_tomography",
         "reconstruct_density_matrix",
+        "reconstruction_summary",
     ],
     "bell": [
         "unit_vector",
