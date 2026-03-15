@@ -75,8 +75,11 @@ EXPECTED_FUNCTIONS = {
         "dominant_bell_state",
     ],
     "chsh": [
+        "correlator_from_counts",
         "correlators_from_counts",
+        "correlators_from_rho",
         "chsh_s_value",
+        "chsh_s_from_rho",
         "violation_margin",
     ],
     "waveplates": [
