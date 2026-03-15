@@ -94,9 +94,15 @@ EXPECTED_FUNCTIONS = {
         "violation_margin",
     ],
     "waveplates": [
+        "analyzer_unitary_from_waveplates",
+        "bloch_direction_from_state",
         "quarter_wave_plate_matrix",
         "half_wave_plate_matrix",
+        "measurement_basis_for_bloch_direction",
         "measurement_basis_from_waveplates",
+        "waveplate_settings_for_bloch_direction",
+        "waveplate_settings_for_label",
+        "waveplate_settings_for_state",
     ],
     "io": [
         "load_counts_table",
