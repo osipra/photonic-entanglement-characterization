@@ -57,6 +57,11 @@ EXPECTED_FUNCTIONS = {
         "linear_entropy",
     ],
     "mle": [
+        "density_matrix_from_lower_triangular_params",
+        "density_matrix_from_dense_params",
+        "measurement_probabilities",
+        "poisson_negative_log_likelihood",
+        "poisson_chi2_loss",
         "fit_density_matrix_mle",
         "mle_diagnostics",
     ],
