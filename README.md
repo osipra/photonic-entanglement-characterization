@@ -1,19 +1,25 @@
 # Photonic Entanglement Characterization
 
-Scaffold for a photonic quantum information analysis toolkit focused on lab-facing workflows such as tomography, Bell/CHSH analysis, waveplate calculations, metrics, IO, and plotting.
+A Python toolkit for **photonic entangled-state characterization**, built from real quantum optics lab workflows and reorganized into a cleaner, reusable package.
 
-## Project layout
+## Purpose
 
-- `src/pec/`: package source code
-- `tests/`: package smoke tests and public API checks
-- `notebooks/`: home for future analysis notebooks
+This repository is designed to turn analysis that would normally remain buried inside lab notebooks into a more structured software project.
 
-The current package is intentionally a scaffold only. It defines module structure, public imports, docstrings, and function signatures without implementing the underlying physics yet.
+Its main goals are to support workflows such as:
 
-## Quick start
+- quantum state tomography
+- Bell-state characterization
+- CHSH / Bell-inequality analysis
+- waveplate and analyzer-setting utilities
+- later, photonic interference and HOM-style analysis
 
-```bash
-pip install -e .[dev]
-pytest
-```
+This is not intended to be a generic quantum computing tutorial repo. The focus is on **lab-oriented photonic QIP analysis**.
 
+## Current structure
+
+```text
+src/pec/
+tests/
+notebooks/
+docs/
