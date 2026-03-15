@@ -66,6 +66,10 @@ EXPECTED_FUNCTIONS = {
         "reconstruct_density_matrix",
     ],
     "bell": [
+        "unit_vector",
+        "axis_observable",
+        "two_qubit_correlation",
+        "pauli_axis_correlations",
         "bell_state_projectors",
         "bell_state_fidelities",
         "dominant_bell_state",
