@@ -105,6 +105,11 @@ EXPECTED_FUNCTIONS = {
         "waveplate_settings_for_state",
     ],
     "io": [
+        "standardize_polarization_label",
+        "standardize_chsh_setting_label",
+        "standardize_chsh_outcome_label",
+        "standardize_counts_table",
+        "counts_dict_from_table",
         "load_counts_table",
         "save_counts_table",
         "load_density_matrix",
