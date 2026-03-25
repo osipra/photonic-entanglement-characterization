@@ -21,6 +21,7 @@ TomographyMethod = Literal["linear_inversion", "mle"]
 __all__ = [
     "TomographyMethod",
     "bloch_vector_from_axis_probabilities",
+    "default_stats_fn",
     "linear_inversion_tomography",
     "measurement_projectors_from_labels",
     "project_to_physical_density_matrix",
@@ -256,6 +257,19 @@ def reconstruct_density_matrix(
             objective=mle_objective,
         )
     raise ValueError(f"Unsupported tomography method: {method!r}")
+
+
+def default_stats_fn(rho: ComplexArray) -> dict[str, float]:
+    """Standard metrics for bootstrap reporting: purity, concurrence, tangle, and Bell fidelities."""
+    from . import metrics, bell
+    result = {
+        "purity": metrics.purity(rho),
+        "concurrence": metrics.concurrence(rho),
+        "tangle": metrics.concurrence(rho) ** 2,
+    }
+    for label, f in bell.bell_state_fidelities(rho).items():
+        result[f"fidelity_{label}"] = f
+    return result
 
 
 def reconstruction_summary(

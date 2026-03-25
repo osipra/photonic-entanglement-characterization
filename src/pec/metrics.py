@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import Callable, Sequence
+
 import numpy as np
 import numpy.linalg as npl
 from numpy.typing import ArrayLike, NDArray
@@ -13,6 +15,7 @@ RealArray = NDArray[np.float64]
 
 __all__ = [
     "bell_state_fidelities",
+    "bootstrap_tomography_uncertainties",
     "concurrence",
     "fidelity",
     "fidelity_pure",
@@ -101,3 +104,31 @@ def concurrence(rho: ArrayLike) -> float:
     roots = np.sqrt(np.clip(np.real(np.real_if_close(eigenvalues)), 0.0, None))
     ordered = np.sort(roots)[::-1]
     return max(0.0, float(ordered[0] - ordered[1] - ordered[2] - ordered[3]))
+
+
+def bootstrap_tomography_uncertainties(
+    counts: ArrayLike,
+    measurement_operators: Sequence[ArrayLike],
+    stats_fn: Callable[[ComplexArray], dict[str, float]],
+    *,
+    n_samples: int = 500,
+    seed: int = 0,
+) -> dict[str, tuple[float, float]]:
+    """
+    Parametric bootstrap for MLE tomography uncertainties.
+    Treats measured counts as Poisson rates, draws n_samples resampled
+    count arrays, runs MLE on each, applies stats_fn to get scalar
+    metrics, and returns {metric_name: (mean, std)} for each.
+    """
+    from . import mle
+
+    counts_array = np.asarray(counts, dtype=np.float64)
+    rng = np.random.default_rng(seed)
+    results: dict[str, list[float]] = {}
+    for _ in range(n_samples):
+        resampled = rng.poisson(counts_array).astype(np.float64)
+        rho = mle.fit_density_matrix_mle(resampled, measurement_operators)
+        sample_stats = stats_fn(rho)
+        for key, value in sample_stats.items():
+            results.setdefault(key, []).append(value)
+    return {key: (float(np.mean(vals)), float(np.std(vals))) for key, vals in results.items()}
