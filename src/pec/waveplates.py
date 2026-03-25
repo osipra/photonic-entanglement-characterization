@@ -52,7 +52,7 @@ def _retarder_matrix(angle_degrees: float, phase_delay: complex) -> ComplexArray
         ],
         dtype=np.complex128,
     )
-    return rotation.conj().T @ retarder @ rotation
+    return rotation @ retarder @ rotation.conj().T
 
 
 def _normalize_state(state_vector: ArrayLike) -> ComplexArray:
@@ -156,8 +156,8 @@ def analyzer_unitary_from_waveplates(
 ) -> ComplexArray:
     """Return the notebook QWP-then-HWP analyzer unitary in the H/V basis."""
     return (
-        half_wave_plate_matrix(hwp_angle_degrees)
-        @ quarter_wave_plate_matrix(qwp_angle_degrees)
+        quarter_wave_plate_matrix(qwp_angle_degrees)
+        @ half_wave_plate_matrix(hwp_angle_degrees)
     )
 
 
