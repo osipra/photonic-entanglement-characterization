@@ -40,12 +40,12 @@ __all__ = [
 def _require_matplotlib():
     """Import matplotlib on demand so the package can import without it."""
     try:
-        import matplotlib.pyplot as plt
+        import matplotlib
     except ModuleNotFoundError as exc:
         raise ModuleNotFoundError(
             "matplotlib is required for pec.plotting helpers. Install the project dependencies to use pec.plotting."
         ) from exc
-    return plt
+    return matplotlib
 
 
 def _default_basis_labels(dimension: int) -> list[str]:
@@ -152,7 +152,7 @@ def plot_density_matrix(
     cmap: str = "RdBu_r",
 ) -> Figure:
     """Visualize the real and/or imaginary parts of a density matrix as heatmaps."""
-    plt = _require_matplotlib()
+    matplotlib = _require_matplotlib()
     matrix = np.asarray(rho, dtype=np.complex128)
     if matrix.ndim != 2 or matrix.shape[0] != matrix.shape[1]:
         raise ValueError("rho must be a square 2D matrix.")
@@ -167,13 +167,11 @@ def plot_density_matrix(
         raise ValueError("basis_labels must match the density-matrix dimension.")
 
     if ax is None:
-        figure, axes = plt.subplots(
-            1,
-            len(component_list),
+        figure = matplotlib.figure.Figure(
             figsize=(4.5 * len(component_list), 4.0),
             constrained_layout=True,
         )
-        axes_list = list(np.atleast_1d(axes))
+        axes_list = list(np.atleast_1d(figure.subplots(1, len(component_list))))
     elif hasattr(ax, "imshow"):
         if len(component_list) != 1:
             raise ValueError("A single Axes can only be used when plotting one component.")
@@ -229,11 +227,16 @@ def plot_coincidence_counts(
     color: str = "C0",
 ) -> Figure:
     """Plot lab coincidence counts as a simple bar chart."""
-    plt = _require_matplotlib()
+    _require_matplotlib()
     plot_labels, plot_values = _label_value_pairs(counts, labels=labels)
 
     if ax is None:
-        figure, axis = plt.subplots(figsize=(max(5.0, 0.6 * len(plot_labels)), 4.0), constrained_layout=True)
+        from matplotlib import pyplot as plt
+
+        figure, axis = plt.subplots(
+            figsize=(max(5.0, 0.6 * len(plot_labels)), 4.0),
+            constrained_layout=True,
+        )
     else:
         axis = ax
         figure = ax.figure
@@ -257,11 +260,12 @@ def plot_bell_state_fidelities(
     show_unity_line: bool = True,
 ) -> Figure:
     """Plot Bell-state fidelities in a canonical Phi/Psi ordering."""
-    plt = _require_matplotlib()
+    matplotlib = _require_matplotlib()
     plot_labels, plot_values = _ordered_mapping_values(fidelities, _BELL_CANONICAL_ORDER)
 
     if ax is None:
-        figure, axis = plt.subplots(figsize=(5.0, 4.0), constrained_layout=True)
+        figure = matplotlib.figure.Figure(figsize=(5.0, 4.0), constrained_layout=True)
+        axis = figure.subplots()
     else:
         axis = ax
         figure = ax.figure
@@ -287,11 +291,12 @@ def plot_chsh_correlators(
     show_s_value: bool = True,
 ) -> Figure:
     """Plot the four CHSH correlators with optional annotation of the resulting S value."""
-    plt = _require_matplotlib()
+    matplotlib = _require_matplotlib()
     plot_labels, plot_values = _ordered_mapping_values(correlators, _CHSH_CANONICAL_ORDER)
 
     if ax is None:
-        figure, axis = plt.subplots(figsize=(6.0, 4.0), constrained_layout=True)
+        figure = matplotlib.figure.Figure(figsize=(6.0, 4.0), constrained_layout=True)
+        axis = figure.subplots()
     else:
         axis = ax
         figure = ax.figure

@@ -34,9 +34,12 @@ def test_plot_density_matrix_creates_real_and_imag_heatmaps() -> None:
     assert figure._suptitle.get_text() == "Bell State"
 
 
-def test_plot_coincidence_counts_uses_mapping_order_and_values() -> None:
-    """Coincidence-count plots should preserve mapping order and bar heights."""
+def test_plot_coincidence_counts_uses_mapping_order_and_values(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Coincidence-count plots should not depend on matplotlib.figure being pre-imported."""
     counts = {"HH": 34749.0, "HV": 324.0, "VV": 35805.0}
+    monkeypatch.delattr(matplotlib, "figure", raising=False)
 
     figure = plotting.plot_coincidence_counts(counts, title="Counts")
     axis = figure.axes[0]
@@ -44,6 +47,20 @@ def test_plot_coincidence_counts_uses_mapping_order_and_values() -> None:
     assert isinstance(figure, Figure)
     assert [patch.get_height() for patch in axis.patches] == [34749.0, 324.0, 35805.0]
     assert [tick.get_text() for tick in axis.get_xticklabels()] == ["HH", "HV", "VV"]
+    assert axis.get_title() == "Counts"
+
+
+def test_plot_coincidence_counts_uses_provided_axes() -> None:
+    """Coincidence-count plots should draw into a supplied axes and return its figure."""
+    counts = [10.0, 20.0]
+    figure = Figure(figsize=(5.0, 4.0))
+    axis = figure.subplots()
+
+    returned_figure = plotting.plot_coincidence_counts(counts, labels=["HH", "VV"], ax=axis, title="Counts")
+
+    assert returned_figure is figure
+    assert [patch.get_height() for patch in axis.patches] == [10.0, 20.0]
+    assert [tick.get_text() for tick in axis.get_xticklabels()] == ["HH", "VV"]
     assert axis.get_title() == "Counts"
 
 
