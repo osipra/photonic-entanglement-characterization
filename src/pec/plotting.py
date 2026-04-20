@@ -225,8 +225,8 @@ def plot_coincidence_counts(
     title: str | None = None,
     ylabel: str = "Counts",
     color: str = "C0",
-) -> Figure:
-    """Plot lab coincidence counts as a simple bar chart."""
+) -> tuple[Figure, Axes]:
+    """Plot lab coincidence counts as a simple bar chart and return its figure and axes."""
     _require_matplotlib()
     plot_labels, plot_values = _label_value_pairs(counts, labels=labels)
 
@@ -248,7 +248,7 @@ def plot_coincidence_counts(
     axis.set_xlabel("Measurement")
     if title:
         axis.set_title(title)
-    return figure
+    return figure, axis
 
 
 def plot_bell_state_fidelities(
